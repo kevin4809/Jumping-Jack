@@ -4,45 +4,45 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-
+    //Numero de enemigos que puedes aparecer en las posiciones Y y X
     public int numEnemysInX;
     public int numEnemysInY; 
 
-
-    private GameObject[,] grid; //Aqui almazenaremos los Gameobjects instanciados 
-
+    //Prefabs de los enemigos
     public GameObject EnemyOne;
     public GameObject EnemyTwo;
     public GameObject EnemyTree;
 
+    //Aqui se almazenara las posicones en las cuales podran aparecer los enemigos 
     private float PositionX;
     private float PositionY;
 
+    //Variable la cual se encargara de escoger que enemigo se instanciara 
     public int selectEnemy;
 
     private void Awake()
     {
+        //Llama el metodo en el cual sera modificado el numero de enemigos que pueden aparecer 
         ChangeValues();
     }
     void Start()
     {
-       
-
-        grid = new GameObject[numEnemysInX, numEnemysInY];
+        //Se instancia el numero de enemigos 
         for (int x = 0; x < numEnemysInX; x++)
         {
             PositionY = -2.645f;
-            for (int y = 0; y < numEnemysInY; y++) //y es es igual a 0. Si y es menor que height se entrara adentro del for, y el valor de y aumentara  
+            for (int y = 0; y < numEnemysInY; y++) 
             {
-
+                //Se da un valor aleatorio para escoger un enemigo alazar y para definir su posicion 
                 selectEnemy = Random.Range(0, 3);
                 PositionX = Random.Range(-6.34f, 6.34f);
+
                 if (selectEnemy == 0)
                 {
-                    GameObject go = GameObject.Instantiate(EnemyOne) as GameObject; //Se instancia el gameobject 
+                    //Se instancia el primer tipo de enemigo 
+                    GameObject go = GameObject.Instantiate(EnemyOne) as GameObject; 
 
-
-
+                    //Se da la posicion en la cual sera instanciado el enemigo 
                     Vector3 position = new Vector3(PositionX, PositionY, 0F);
                     PositionY += 1.2f;
                     go.transform.position = position;
@@ -50,10 +50,10 @@ public class EnemyManager : MonoBehaviour
 
                 if (selectEnemy == 1)
                 {
-                    GameObject go = GameObject.Instantiate(EnemyTwo) as GameObject; //Se instancia el gameobject 
+                    //Se instancia el segundo tipo de enemigo 
+                    GameObject go = GameObject.Instantiate(EnemyTwo) as GameObject;
 
-
-
+                    //Se da la posicion en la cual sera instanciado el enemigo 
                     Vector3 position = new Vector3(PositionX, PositionY, 0F);
                     PositionY += 1.2f;
                     go.transform.position = position;
@@ -61,10 +61,10 @@ public class EnemyManager : MonoBehaviour
 
                 if (selectEnemy == 2)
                 {
-                    GameObject go = GameObject.Instantiate(EnemyTree) as GameObject; //Se instancia el gameobject 
+                    //Se instancia el tercer tipo de enemigo 
+                    GameObject go = GameObject.Instantiate(EnemyTree) as GameObject;
 
-
-
+                    //Se da la posicion en la cual sera instanciado el enemigo 
                     Vector3 position = new Vector3(PositionX, PositionY, 0F);
                     PositionY += 1.2f;
                     go.transform.position = position;
@@ -81,6 +81,7 @@ public class EnemyManager : MonoBehaviour
 
 
 
+    //Metodo en el cual definimos el numero de enemigos que aparezeran dependiendo del nivel en el que se encuentre el jugador
     public void ChangeValues()
     {
         if (LevelManager.instance.level <= 1) { numEnemysInX = 0; numEnemysInY = 0; }
