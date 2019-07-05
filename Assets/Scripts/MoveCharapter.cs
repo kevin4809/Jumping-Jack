@@ -11,6 +11,7 @@ public class MoveCharapter : MonoBehaviour
 
     //Variable con la cual controlaremos las animaciones 
     private Animator anim;
+    private Animator animCamera;
 
     //Boleanos con los cuales se sabra si el personaje esta saltado o callendo 
     private bool isJumping = false;
@@ -43,7 +44,7 @@ public class MoveCharapter : MonoBehaviour
 
     //Contador para diferenciar cuando el jugador esta callendo o esta saltando 
     private float timeForTouchGround;
-    private float timeForTouchBeforeGround = 4;
+    private float timeForTouchBeforeGround = 3;
    
 
     private void Start()
@@ -51,6 +52,8 @@ public class MoveCharapter : MonoBehaviour
         //Anim toma los componentes del animator y currentlive toma los componentes del scrip lives 
         anim = GetComponentInChildren<Animator>();
         currentLive = GameObject.FindObjectOfType<lives>();
+
+        animCamera = GameObject.Find("Main Camera").GetComponentInChildren<Animator>();
 
         //Se da el valor de vida guardado con playerprefs 
         if (PlayerPrefs.HasKey("Live"))
@@ -94,7 +97,7 @@ public class MoveCharapter : MonoBehaviour
     //Metodo en el cual se controla todo lo relacionado con el salto del jugador y sus animaciones
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && isJumping == false)
+        if (Input.GetKeyDown(KeyCode.W) && isJumping == false && isDown == false)
         {
             anim.SetBool("Jump", true);
             StartCoroutine(TimeForJump());
@@ -126,7 +129,12 @@ public class MoveCharapter : MonoBehaviour
         RaycastHit2D enemyDetection = Physics2D.Raycast(enemyDetectionEnemy.position, Vector2.right, distance, layerEnemy);
         RaycastHit2D groundDownInfo = Physics2D.Raycast(groundDetectionDown.position, Vector2.down, distance, layerWall);
 
-        if (groundInfo.collider) { Time.timeScale = 0.0F; currentLive.ChangeLive(0); PlayerPrefs.DeleteAll(); SceneManager.LoadScene("1");  }
+        if (groundInfo.collider)
+        {
+            Death(); 
+          
+            
+        }
         
 
         if (!groundDownInfo.collider && timeForTouchGround <= 0 )
@@ -141,10 +149,16 @@ public class MoveCharapter : MonoBehaviour
         {
                 live -= 1;
                 currentLive.ChangeLive(live);
-                timeForRestLive = timeForRestLiveCL;         
-        }
+                animCamera.SetBool("Damage", true);
+                timeForRestLive = timeForRestLiveCL;
 
-        if(live <= 0) { Time.timeScale = 0.0F; PlayerPrefs.DeleteAll(); SceneManager.LoadScene("1");  }
+        }
+        else { animCamera.SetBool("Damage", false); }
+
+        if(live <= 0)
+        {
+            Death();
+        }
     }
 
     //Dibuja un gizmo que ayuda a medir la distancia de los raycast
@@ -183,7 +197,17 @@ public class MoveCharapter : MonoBehaviour
         if(transform.position.y >= 5.5) { LevelManager.instance.checkForNextLevel(); }
     }
 
-   
+   //Metodo el cual se unvocara cuando el jugador muera
+    public void Death()
+    {
+        live = 5;
+        Time.timeScale = 0.0F;
+        SceneManager.LoadScene("1");
+        PlayerPrefs.DeleteKey("Level");
+        PlayerPrefs.SetInt("Live", 5);
+        PlayerPrefs.DeleteKey("Score");
 
+
+    }
 
 }

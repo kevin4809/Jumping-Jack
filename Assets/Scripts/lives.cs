@@ -10,11 +10,16 @@ public class lives : MonoBehaviour
   
     private void Start()
     {
+      
+    }
+
+    private void Awake()
+    {
         //Llamamos al metodo changelive y le decimos que "pos" es igual a el numero de vidas del jugador 
         ChangeLive(MoveCharapter.live);
     }
 
-   
+
     //Metodo en el cual se controla los sprites de los corazones  
     public void ChangeLive ( int pos)
     {

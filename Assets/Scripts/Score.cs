@@ -14,11 +14,16 @@ public class Score : MonoBehaviour
     {
         scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
    
-        //Se optiene el puntaje guardado en el playerprefbs
+       /* //Se optiene el puntaje guardado en el playerprefbs
         if (PlayerPrefs.HasKey("Score"))
         {
             PlayerPrefs.GetInt("Score", score);
-        }  
+        }*/  
+    }
+
+    private void Awake()
+    {
+        score = PlayerPrefs.GetInt("Score");
     }
 
     void Update()
