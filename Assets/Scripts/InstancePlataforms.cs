@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class InstancePlataforms : MonoBehaviour
 {
-    public int width;  //Definimos el numero de prefabs que queremos instanciar, en forma horizontal 
-    public int height; //Definimos el numero de prefabs que queremos instanciar, en forma vertical 
+    public int width;  
+    public int height;
 
-    public GameObject numPLatafOne; //El Gameobject que deseamos Instanciar 
-    private GameObject[,] grid; //Aqui almazenaremos los Gameobjects instanciados 
+    public GameObject numPLatafOne;
+    private GameObject[,] grid;
     public GameObject numPlatafTwo;
 
     private float[] valueX = new float[] { -20.5f, -16.5f, -12.5f };
@@ -18,65 +18,66 @@ public class InstancePlataforms : MonoBehaviour
    private int randomPlataform;
     public float vX;
     public float vY;
-    void Start()
+
+
+    private void Start()
     {
+        InstancePLat();
 
-        grid = new GameObject[width, height];
-        for (int x = 0; x < width; x++) //x es es igual a 0. Si x es menor que width se entrara adentro del for, y el valor de x aumentara  
-        {
-            vY = -3f;
-            for (int y = 0; y < height; y++) //y es es igual a 0. Si y es menor que height se entrara adentro del for, y el valor de y aumentara  
+    }
+
+  
+
+    public void InstancePLat()
+    {
+            grid = new GameObject[width, height];
+            for (int x = 0; x < width; x++) 
             {
-
-                randomPlataform = Random.Range(0, 2);
-                randomDirection = Random.Range(0, 2);
-                if (randomPlataform == 0)
+                vY = -3f;
+                for (int y = 0; y < height; y++)
                 {
 
-                    GameObject go = GameObject.Instantiate(numPLatafOne) as GameObject; //Se instancia el gameobject 
-
-                    if (randomDirection == 0)
+                    randomPlataform = Random.Range(0, 2);
+                    randomDirection = Random.Range(0, 2);
+                    if (randomPlataform == 0)
                     {
-                        vX = Random.Range(-11.64f, -3f);
-                        Vector3 position = new Vector3(vX, vY, 0F);
-                        vY += 1.2f;
-                        go.transform.position = position;
+
+                        GameObject go = GameObject.Instantiate(numPLatafOne) as GameObject;  
+
+                        if (randomDirection == 0)
+                        {
+                            vX = Random.Range(-11.64f, -3f);
+                            Vector3 position = new Vector3(vX, vY, 0F);
+                            vY += 1.2f;
+                            go.transform.position = position;
+                        
                     }
+                        else
+                        {
+                            vX = Random.Range(-27.22f, -35f);
+                            Vector3 position = new Vector3(vX, vY, 0F);
+                            vY += 1.2f;
+                            go.transform.position = position;
+                        }
+                     
+                }
                     else
                     {
-                        vX = Random.Range(-27.22f, -35f);
-                        Vector3 position = new Vector3(vX, vY, 0F);
+                        GameObject go = GameObject.Instantiate(numPlatafTwo) as GameObject; 
+
+                        Vector3 position = new Vector3(4f, vY, 0f);
                         vY += 1.2f;
                         go.transform.position = position;
+
                     }
 
-                }
-                else
-                {
-                    GameObject go = GameObject.Instantiate(numPlatafTwo) as GameObject; //Se instancia el gameobject
-
-                    Vector3 position = new Vector3(4f, vY, 0f);
-                    vY += 1.2f;
-                    go.transform.position = position;
-
-                }
-
-
+            
 
             }
 
-
-
-            //Asignamos la posicion el la cual se van a instanciar los Gameobjects 
-            // float spawnYPosition = Random.Range(plataformMin, plataformMax);
-
-
-
-            //  grid[x, y] = go;  //se almacena la posicion de los Gameobjects en "x" y "y"
-
+            }
 
         }
-
-    }
+    
 }
 

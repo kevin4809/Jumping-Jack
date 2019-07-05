@@ -9,7 +9,7 @@ public class lives : MonoBehaviour
   
     private void Start()
     {
-        ChangeLive(5);
+        ChangeLive(MoveCharapter.live);
     }
 
    

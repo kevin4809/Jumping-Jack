@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MoveCharapter : MonoBehaviour
 {
@@ -18,8 +19,7 @@ public class MoveCharapter : MonoBehaviour
 
     public static int live = 5;
     public lives currentLive;
-    public LevelManager pasLevl;
-    
+
 
     private float timeForRestLive;
     public float timeForRestLiveCL;
@@ -28,8 +28,13 @@ public class MoveCharapter : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         currentLive = GameObject.FindObjectOfType<lives>();
-        pasLevl = GameObject.FindObjectOfType<LevelManager>();
 
+        if (PlayerPrefs.HasKey("Live"))
+        {
+            PlayerPrefs.GetInt("Live", live);
+        }
+
+     
 
     }
     void Update()
@@ -38,8 +43,9 @@ public class MoveCharapter : MonoBehaviour
         Jump();
         CheckDamagePlayer();
         CheckPositionPlayer();
-
        
+
+
     }
 
 
@@ -67,7 +73,8 @@ public class MoveCharapter : MonoBehaviour
         {
             anim.SetBool("Jump", true);
             StartCoroutine(TimeForJump());
-           
+        
+
         }
         else { anim.SetBool("Jump", false); }
 
@@ -78,9 +85,11 @@ public class MoveCharapter : MonoBehaviour
     {
         isJumping = true;
         yield return new WaitForSeconds(0.4f);
-        Score.score += 5;
         isJumping = false;
+    
+        Score.score += 5 * LevelManager.instance.level;
        
+
     }
 
 
@@ -89,7 +98,7 @@ public class MoveCharapter : MonoBehaviour
         RaycastHit2D groundInfo = Physics2D.Raycast(groundDetection.position, Vector2.up, distance, layerWall);
         RaycastHit2D enemyDetection = Physics2D.Raycast(enemyDetectionDown.position, Vector2.right, distance, layerEnemy);
 
-        if (groundInfo.collider) { Time.timeScale = 0.0F; currentLive.ChangeLive(0); }
+        if (groundInfo.collider) { Time.timeScale = 0.0F; currentLive.ChangeLive(0); PlayerPrefs.DeleteAll(); SceneManager.LoadScene("1"); }
 
         timeForRestLive -= Time.deltaTime;
 
@@ -100,7 +109,7 @@ public class MoveCharapter : MonoBehaviour
                 timeForRestLive = timeForRestLiveCL;         
         }
 
-        if(live <= 0) { Time.timeScale = 0.0F; }
+        if(live <= 0) { Time.timeScale = 0.0F; PlayerPrefs.DeleteAll(); SceneManager.LoadScene("1"); }
     }
 
     void OnDrawGizmos()
@@ -127,7 +136,7 @@ public class MoveCharapter : MonoBehaviour
         }
 
 
-        if(transform.position.y >= 5.5f) { pasLevl.checkForNextLevel(); }
+        if(transform.position.y >= 5.8) { LevelManager.instance.checkForNextLevel(); }
     }
 
    

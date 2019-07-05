@@ -6,12 +6,16 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     public Text scoreText = null;
-    public static float score = 0;
+    public static int score = 0;
 
 
     void Start()
     {
-        scoreText = GameObject.Find("ScoreText").GetComponent<Text>(); 
+        scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
+        if (PlayerPrefs.HasKey("Score"))
+        {
+            PlayerPrefs.GetInt("Score", score);
+        }
     }
 
     void Update()
